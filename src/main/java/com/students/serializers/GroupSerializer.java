@@ -1,4 +1,4 @@
-package com.students.Serializers;
+package com.students.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.j256.ormlite.dao.Dao;
 import com.students.models.Student;
 import com.students.models.Student_group;
-import com.students.service.StudentRequest;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -50,5 +49,12 @@ public class GroupSerializer extends StdSerializer<Student_group> {
             count++;
         }
         return groupJson;
+    }
+    static public String groupStringConverter(Student_group student_group,Dao<Student_group, Integer> dao,Dao<Student,Integer> daoStudent) throws JsonProcessingException {
+        ObjectMapper om=new ObjectMapper();
+        SimpleModule m=new SimpleModule();
+        m.addSerializer(Student_group.class,new GroupSerializer(dao,daoStudent));
+        om.registerModule(m);
+        return om.writeValueAsString(student_group);
     }
 }

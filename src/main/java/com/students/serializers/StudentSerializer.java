@@ -1,4 +1,4 @@
-package com.students.Serializers;
+package com.students.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -38,5 +38,12 @@ public class StudentSerializer extends StdSerializer<Student> {
             count++;
         }
         return string;
+    }
+    static public String studentStringConverter(Student student) throws JsonProcessingException {
+        ObjectMapper om=new ObjectMapper();
+        SimpleModule m=new SimpleModule();
+        m.addSerializer(Student.class,new StudentSerializer());
+        om.registerModule(m);
+        return om.writeValueAsString(student);
     }
 }
