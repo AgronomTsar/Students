@@ -11,6 +11,9 @@ public class Student_group {
     String name;
     @DatabaseField
     String specially_name;
+    public Student_group(){
+
+    }
 
     public Student_group(int id_group, String name, String specially_name) {
         this.id_group = id_group;

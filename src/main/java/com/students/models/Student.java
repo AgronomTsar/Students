@@ -15,9 +15,10 @@ public class Student {
     String phone;
     @DatabaseField
     String email;
-    @DatabaseField(foreign=true, foreignAutoRefresh = true)
+    @DatabaseField(columnName = "id_group",foreign=true, foreignAutoRefresh = true)
     Student_group id_group;
-
+    public Student(){
+    }
     public Student(int id, String first_name, String last_name, String phone, String email, Student_group id_group) {
         this.id = id;
         this.first_name = first_name;
