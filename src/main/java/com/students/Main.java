@@ -4,6 +4,9 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
+import com.students.connections.GroupConnections;
+import com.students.connections.StudentConnection;
+import com.students.deserializer.StudentDeserializer;
 import com.students.models.Student;
 import com.students.models.Student_group;
 import com.students.service.GroupRequest;
@@ -22,48 +25,18 @@ public class Main {
         StudentRequest st=new StudentRequest(StudentDao);
         GroupRequest g=new GroupRequest(GroupDao,StudentDao);
         Javalin app= Javalin.create();
-        app.get("/student",ctx->ctx.result(String.valueOf(st.findAllStudents(ctx))));
-        app.get("/student/:id",ctx->{
-            ctx.result(st.findStudentById(Integer.parseInt(ctx.pathParam("id"))));
-            ctx.status(200);
-
-        });
-        app.patch("/student/:id/:first_name/:last_name/:phone/:email/:id_group",
-                ctx->ctx.result(st.updateStudentById(ctx,Integer.parseInt(ctx.pathParam("id")),
-                        ctx.pathParam("first_name"),
-                        ctx.pathParam("last_name"),
-                        ctx.pathParam("phone"),
-                        ctx.pathParam("email"),
-                        g.findGroupById(Integer.parseInt(ctx.pathParam("id_group"))))));
-        app.post("/student/:id/:first_name/:last_name/:phone/:email/:id_group",ctx->
-                ctx.result(st.saveStudent(ctx,
-                        Integer.parseInt(ctx.pathParam("id")),
-                        ctx.pathParam("first_name"),
-                        ctx.pathParam("last_name"),
-                        ctx.pathParam("phone"),
-                        ctx.pathParam("email"),
-                        g.findGroupById(Integer.parseInt(ctx.pathParam("id_group"))))));
-        app.delete("/student/:id",ctx->{
-            st.deleteStudent(ctx,Integer.parseInt(ctx.pathParam("id")));
-            ctx.status(204).result("204");
-        });
-        app.get("/groups",ctx->ctx.result(String.valueOf(g.findAllGroup(ctx))));
-        app.get("/group/:id",ctx->{
-            ctx.result(g.groupId(Integer.parseInt(ctx.pathParam("id"))));
-            ctx.status(200);
-        });
-        app.patch("/group/:id/:name/:specialty_name",ctx->ctx.result(g.updateGroupById(
-                ctx,
-                Integer.parseInt(ctx.pathParam("id")),
-                ctx.pathParam("name"),
-                ctx.pathParam("specialty_name"))));
-        app.post("/group/:id/:name/:specialty_name",ctx->
-                ctx.result(g.saveGroup(
-                        ctx,
-                        Integer.parseInt(ctx.pathParam("id")),
-                        ctx.pathParam("name"),
-                        ctx.pathParam("specialty_name"))));
-        app.delete("/group/:id",ctx->g.deleteGroup(ctx,Integer.parseInt(ctx.pathParam("id"))));
+        StudentConnection studentConnection=new StudentConnection(StudentDao,GroupDao,st,g,app);
+        GroupConnections groupConnections=new GroupConnections(StudentDao,GroupDao,st,g,app);
+        studentConnection.getStudent();
+        studentConnection.getStudentById();
+        studentConnection.updateStudent();
+        studentConnection.saveStudent();
+        studentConnection.deleteStudent();
+        groupConnections.getAllGroups();
+        groupConnections.getGroupById();
+        groupConnections.updateGroup();
+        groupConnections.saveGroup();
+        groupConnections.deleteGroup();
         app.start(8080);
     }
 }
