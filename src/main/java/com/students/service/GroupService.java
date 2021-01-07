@@ -14,29 +14,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupRequest {
+public class GroupService {
     private final Dao<StudentGroup,Integer> dao;
     private final Dao<Student,Integer> daoStudent;
-    public GroupRequest(Dao<StudentGroup, Integer> dao, Dao<Student,Integer> daoStudent) {
+    public GroupService(Dao<StudentGroup, Integer> dao, Dao<Student,Integer> daoStudent) {
         this.dao = dao;
         this.daoStudent=daoStudent;
     }
-    public StudentGroup findGroupById(int id) throws SQLException, JsonProcessingException {
-        return dao.queryForId(id);
-    }
     public String findAllGroup(Context ctx) throws SQLException, JsonProcessingException {
         ArrayList<StudentGroup> groups= (ArrayList<StudentGroup>) dao.queryForAll();
-//        ArrayList<String> groupJson=new ArrayList<String>();
         ObjectMapper om=new ObjectMapper();
         SimpleModule m=new SimpleModule();
         m.addSerializer(StudentGroup.class,new GroupSerializer(dao,daoStudent));
         m.addSerializer(Student.class, new StudentSerializer());
         om.registerModule(m);
-//        int count=0;
-//        while(count<groups.size()){
-//            groupJson.add(om.writeValueAsString(groups.get(count)));
-//            count++;
-//        }
         ctx.status(200);
         return om.writeValueAsString(groups);
     }

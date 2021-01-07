@@ -8,8 +8,8 @@ import com.students.controllers.GroupControllers;
 import com.students.controllers.StudentControllers;
 import com.students.models.Student;
 import com.students.models.StudentGroup;
-import com.students.service.GroupRequest;
-import com.students.service.StudentRequest;
+import com.students.service.GroupService;
+import com.students.service.StudentService;
 import io.javalin.Javalin;
 
 import java.sql.SQLException;
@@ -20,8 +20,8 @@ public class Main {
         ConnectionSource url = new JdbcConnectionSource(path);
         Dao<Student,Integer> StudentDao= DaoManager.createDao(url,Student.class);
         Dao<StudentGroup,Integer> GroupDao= DaoManager.createDao(url, StudentGroup.class);
-        StudentRequest st=new StudentRequest(StudentDao);
-        GroupRequest g=new GroupRequest(GroupDao,StudentDao);
+        StudentService st=new StudentService(StudentDao);
+        GroupService g=new GroupService(GroupDao,StudentDao);
         Javalin app= Javalin.create();
         StudentControllers studentControllers =new StudentControllers(StudentDao,GroupDao,st,g,app);
         GroupControllers groupControllers =new GroupControllers(StudentDao,GroupDao,st,g,app);

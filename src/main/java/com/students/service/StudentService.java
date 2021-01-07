@@ -13,25 +13,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentRequest {
+public class StudentService {
     private final Dao<Student, Integer> dao;
-    public StudentRequest(Dao<Student, Integer> dao) {
+    public StudentService(Dao<Student, Integer> dao) {
         this.dao = dao;
     }
-    public List<String> findAllStudents(Context ctx) throws SQLException, JsonProcessingException {
+    public String findAllStudents(Context ctx) throws SQLException, JsonProcessingException {
         ArrayList<Student> students= (ArrayList<Student>) dao.queryForAll();
         ObjectMapper om=new ObjectMapper();
         SimpleModule m=new SimpleModule();
         m.addSerializer(Student.class,new StudentSerializer());
         om.registerModule(m);
-        ArrayList<String> string=new ArrayList<>();
-        int count=0;
-        while (count<students.size()){
-            string.add(om.writeValueAsString(students.get(count)));
-            count++;
-        }
         ctx.status(200);
-        return string;
+        return om.writeValueAsString(students);
 
     }
     public String findStudentById(int id) throws SQLException, JsonProcessingException {

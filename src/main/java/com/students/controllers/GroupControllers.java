@@ -4,22 +4,22 @@ import com.j256.ormlite.dao.Dao;
 import com.students.deserializer.GroupDeserializer;
 import com.students.models.Student;
 import com.students.models.StudentGroup;
-import com.students.service.GroupRequest;
-import com.students.service.StudentRequest;
+import com.students.service.GroupService;
+import com.students.service.StudentService;
 import io.javalin.Javalin;
 
 public class GroupControllers {
     Dao<Student,Integer> StudentDao;
     Dao<StudentGroup,Integer> GroupDao;
-    StudentRequest st;
-    GroupRequest g;
+    StudentService st;
+    GroupService g;
     Javalin app;
     String groupGet="/groups";
     String groupId="/group/:id";
     String groupPatch="/groupPatch";
     String groupSave="/groupSave";
     String groupDelete="/groupDelete/:id";
-    public GroupControllers(Dao<Student, Integer> studentDao, Dao<StudentGroup, Integer> groupDao, StudentRequest st, GroupRequest g, Javalin app) {
+    public GroupControllers(Dao<Student, Integer> studentDao, Dao<StudentGroup, Integer> groupDao, StudentService st, GroupService g, Javalin app) {
         StudentDao = studentDao;
         GroupDao = groupDao;
         this.st = st;
