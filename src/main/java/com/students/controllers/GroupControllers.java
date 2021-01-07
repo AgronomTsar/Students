@@ -1,17 +1,16 @@
-package com.students.connections;
+package com.students.controllers;
 
 import com.j256.ormlite.dao.Dao;
 import com.students.deserializer.GroupDeserializer;
 import com.students.models.Student;
-import com.students.models.Student_group;
+import com.students.models.studentGroup;
 import com.students.service.GroupRequest;
 import com.students.service.StudentRequest;
 import io.javalin.Javalin;
 
-public class GroupConnections {
-    final String path="jdbc:sqlite:C:\\Users\\77012\\Desktop\\бд\\students.db";
+public class GroupControllers {
     Dao<Student,Integer> StudentDao;
-    Dao<Student_group,Integer> GroupDao;
+    Dao<studentGroup,Integer> GroupDao;
     StudentRequest st;
     GroupRequest g;
     Javalin app;
@@ -20,7 +19,7 @@ public class GroupConnections {
     String groupPatch="/groupPatch";
     String groupSave="/groupSave";
     String groupDelete="/groupDelete/:id";
-    public GroupConnections(Dao<Student, Integer> studentDao, Dao<Student_group, Integer> groupDao, StudentRequest st, GroupRequest g, Javalin app) {
+    public GroupControllers(Dao<Student, Integer> studentDao, Dao<studentGroup, Integer> groupDao, StudentRequest st, GroupRequest g, Javalin app) {
         StudentDao = studentDao;
         GroupDao = groupDao;
         this.st = st;
@@ -39,15 +38,15 @@ public class GroupConnections {
     public void updateGroup(){
         app.patch(groupPatch,ctx->{
             String json=ctx.body();
-            Student_group student_group= GroupDeserializer.groupObjectConverter(json);
-            ctx.result(g.updateGroupById(ctx,student_group.getId_group(),student_group.getName(),student_group.getSpecially_name()));
+            studentGroup studentGroup = GroupDeserializer.groupObjectConverter(json);
+            ctx.result(g.updateGroupById(ctx, studentGroup.getId_group(), studentGroup.getName(), studentGroup.getSpecially_name()));
         });
     }
     public void saveGroup(){
         app.post(groupSave,ctx->{
             String json=ctx.body();
-            Student_group student_group=GroupDeserializer.groupObjectConverter(json);
-            ctx.result(g.saveGroup(ctx,student_group.getId_group(),student_group.getName(),student_group.getSpecially_name()));
+            studentGroup studentGroup =GroupDeserializer.groupObjectConverter(json);
+            ctx.result(g.saveGroup(ctx, studentGroup.getId_group(), studentGroup.getName(), studentGroup.getSpecially_name()));
         });
     }
     public void deleteGroup(){

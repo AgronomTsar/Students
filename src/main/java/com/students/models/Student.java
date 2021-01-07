@@ -16,10 +16,10 @@ public class Student {
     @DatabaseField
     String email;
     @DatabaseField(columnName = "id_group",foreign=true, foreignAutoRefresh = true)
-    Student_group id_group;
+    studentGroup id_group;
     public Student(){
     }
-    public Student(int id, String first_name, String last_name, String phone, String email, Student_group id_group) {
+    public Student(int id, String first_name, String last_name, String phone, String email, studentGroup id_group) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -68,11 +68,11 @@ public class Student {
         this.email = email;
     }
 
-    public Student_group getId_group() {
+    public studentGroup getId_group() {
         return id_group;
     }
 
-    public void setId_group(Student_group id_group) {
+    public void setId_group(studentGroup id_group) {
         this.id_group = id_group;
     }
 

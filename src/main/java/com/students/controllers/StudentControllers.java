@@ -1,22 +1,16 @@
-package com.students.connections;
+package com.students.controllers;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.support.ConnectionSource;
 import com.students.deserializer.StudentDeserializer;
 import com.students.models.Student;
-import com.students.models.Student_group;
+import com.students.models.studentGroup;
 import com.students.service.GroupRequest;
 import com.students.service.StudentRequest;
 import io.javalin.Javalin;
 
-import java.sql.SQLException;
-
-public class StudentConnection {
-    final String path="jdbc:sqlite:C:\\Users\\77012\\Desktop\\бд\\students.db";
+public class StudentControllers {
     Dao<Student,Integer> StudentDao;
-    Dao<Student_group,Integer> GroupDao;
+    Dao<studentGroup,Integer> GroupDao;
     StudentRequest st;
     GroupRequest g;
     Javalin app;
@@ -25,7 +19,7 @@ public class StudentConnection {
     String studentPatch="/studentPatch";
     String studentSave="/studentSave";
 
-    public StudentConnection(Dao<Student, Integer> studentDao, Dao<Student_group, Integer> groupDao, StudentRequest st, GroupRequest g,Javalin app) {
+    public StudentControllers(Dao<Student, Integer> studentDao, Dao<studentGroup, Integer> groupDao, StudentRequest st, GroupRequest g, Javalin app) {
         StudentDao = studentDao;
         GroupDao = groupDao;
         this.st = st;

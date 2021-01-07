@@ -9,17 +9,17 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.j256.ormlite.dao.Dao;
 import com.students.models.Student;
-import com.students.models.Student_group;
+import com.students.models.studentGroup;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class StudentDeserializer extends StdDeserializer<Student> {
-    protected StudentDeserializer(Dao<Student_group, Integer> dao) {
+    protected StudentDeserializer(Dao<studentGroup, Integer> dao) {
         super(Student.class);
         this.daoGroup = dao;
     }
-    private final Dao<Student_group,Integer> daoGroup;
+    private final Dao<studentGroup,Integer> daoGroup;
     @Override
     public Student deserialize(JsonParser parser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode root=parser.getCodec().readTree(parser);
@@ -36,7 +36,7 @@ public class StudentDeserializer extends StdDeserializer<Student> {
             return null;
         }
     }
-    static public Student studentObjectConverter(String json,Dao<Student_group,Integer> daoGroup) throws JsonProcessingException {
+    static public Student studentObjectConverter(String json,Dao<studentGroup,Integer> daoGroup) throws JsonProcessingException {
         ObjectMapper om=new ObjectMapper();
         SimpleModule m=new SimpleModule();
         m.addDeserializer(Student.class,new StudentDeserializer(daoGroup));

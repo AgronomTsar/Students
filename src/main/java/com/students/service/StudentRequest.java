@@ -1,10 +1,12 @@
 package com.students.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.j256.ormlite.dao.Dao;
 import com.students.serializers.StudentSerializer;
 import com.students.models.Student;
-import com.students.models.Student_group;
+import com.students.models.studentGroup;
 import io.javalin.http.Context;
 
 import java.sql.SQLException;
@@ -18,15 +20,29 @@ public class StudentRequest {
     }
     public List<String> findAllStudents(Context ctx) throws SQLException, JsonProcessingException {
         ArrayList<Student> students= (ArrayList<Student>) dao.queryForAll();
-        ArrayList<String> jsonStudents= (ArrayList<String>) StudentSerializer.studentList(students);
+        ObjectMapper om=new ObjectMapper();
+        SimpleModule m=new SimpleModule();
+        m.addSerializer(Student.class,new StudentSerializer());
+        om.registerModule(m);
+        ArrayList<String> string=new ArrayList<>();
+        int count=0;
+        while (count<students.size()){
+            string.add(om.writeValueAsString(students.get(count)));
+            count++;
+        }
         ctx.status(200);
-        return jsonStudents;
+        return string;
+
     }
     public String findStudentById(int id) throws SQLException, JsonProcessingException {
         Student student=dao.queryForId(id);
-        return StudentSerializer.studentStringConverter(student);
+        ObjectMapper om=new ObjectMapper();
+        SimpleModule m=new SimpleModule();
+        m.addSerializer(Student.class,new StudentSerializer());
+        om.registerModule(m);
+        return om.writeValueAsString(student);
     }
-    public String updateStudentById(Context ctx,int id, String first_name, String last_name, String phone, String email, Student_group id_group) throws SQLException, JsonProcessingException {
+    public String updateStudentById(Context ctx,int id, String first_name, String last_name, String phone, String email, studentGroup id_group) throws SQLException, JsonProcessingException {
         Student student=dao.queryForId(id);
         student.setFirst_name(first_name);
         student.setLast_name(last_name);
@@ -37,7 +53,7 @@ public class StudentRequest {
         ctx.status(200);
         return findStudentById(id) ;
     }
-    public String saveStudent(Context ctx,int id,String firstName,String lastName,String phone,String email,Student_group id_group) throws SQLException, JsonProcessingException {
+    public String saveStudent(Context ctx, int id, String firstName, String lastName, String phone, String email, studentGroup id_group) throws SQLException, JsonProcessingException {
         Student student=new Student(id,firstName,lastName,phone,email,id_group);
         dao.create(student);
         ctx.status(201);

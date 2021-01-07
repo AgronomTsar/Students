@@ -4,15 +4,13 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
-import com.students.connections.GroupConnections;
-import com.students.connections.StudentConnection;
-import com.students.deserializer.StudentDeserializer;
+import com.students.controllers.GroupControllers;
+import com.students.controllers.StudentControllers;
 import com.students.models.Student;
-import com.students.models.Student_group;
+import com.students.models.studentGroup;
 import com.students.service.GroupRequest;
 import com.students.service.StudentRequest;
 import io.javalin.Javalin;
-import javafx.scene.Group;
 
 import java.sql.SQLException;
 
@@ -21,22 +19,22 @@ public class Main {
         String path="jdbc:sqlite:C:\\Users\\77012\\Desktop\\бд\\students.db";
         ConnectionSource url = new JdbcConnectionSource(path);
         Dao<Student,Integer> StudentDao= DaoManager.createDao(url,Student.class);
-        Dao<Student_group,Integer> GroupDao= DaoManager.createDao(url,Student_group.class);
+        Dao<studentGroup,Integer> GroupDao= DaoManager.createDao(url, studentGroup.class);
         StudentRequest st=new StudentRequest(StudentDao);
         GroupRequest g=new GroupRequest(GroupDao,StudentDao);
         Javalin app= Javalin.create();
-        StudentConnection studentConnection=new StudentConnection(StudentDao,GroupDao,st,g,app);
-        GroupConnections groupConnections=new GroupConnections(StudentDao,GroupDao,st,g,app);
-        studentConnection.getStudent();
-        studentConnection.getStudentById();
-        studentConnection.updateStudent();
-        studentConnection.saveStudent();
-        studentConnection.deleteStudent();
-        groupConnections.getAllGroups();
-        groupConnections.getGroupById();
-        groupConnections.updateGroup();
-        groupConnections.saveGroup();
-        groupConnections.deleteGroup();
+        StudentControllers studentControllers =new StudentControllers(StudentDao,GroupDao,st,g,app);
+        GroupControllers groupControllers =new GroupControllers(StudentDao,GroupDao,st,g,app);
+        studentControllers.getStudent();
+        studentControllers.getStudentById();
+        studentControllers.updateStudent();
+        studentControllers.saveStudent();
+        studentControllers.deleteStudent();
+        groupControllers.getAllGroups();
+        groupControllers.getGroupById();
+        groupControllers.updateGroup();
+        groupControllers.saveGroup();
+        groupControllers.deleteGroup();
         app.start(8080);
     }
 }

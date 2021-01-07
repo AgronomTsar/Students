@@ -4,18 +4,18 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName="Student_group")
-public class Student_group {
+public class studentGroup {
     @DatabaseField(id=true)
     int id_group;
     @DatabaseField
     String name;
     @DatabaseField
     String specially_name;
-    public Student_group(){
+    public studentGroup(){
 
     }
 
-    public Student_group(int id_group, String name, String specially_name) {
+    public studentGroup(int id_group, String name, String specially_name) {
         this.id_group = id_group;
         this.name = name;
         this.specially_name = specially_name;

@@ -26,24 +26,5 @@ public class StudentSerializer extends StdSerializer<Student> {
         gen.writeStringField("id_group",s.getId_group().getName());
         gen.writeEndObject();
     }
-    static public List<String> studentList(List<Student> students) throws JsonProcessingException {
-        ObjectMapper om=new ObjectMapper();
-        SimpleModule m=new SimpleModule();
-        m.addSerializer(Student.class,new StudentSerializer());
-        om.registerModule(m);
-        ArrayList<String> string=new ArrayList<>();
-        int count=0;
-        while (count<students.size()){
-            string.add(om.writeValueAsString(students.get(count)));
-            count++;
-        }
-        return string;
-    }
-    static public String studentStringConverter(Student student) throws JsonProcessingException {
-        ObjectMapper om=new ObjectMapper();
-        SimpleModule m=new SimpleModule();
-        m.addSerializer(Student.class,new StudentSerializer());
-        om.registerModule(m);
-        return om.writeValueAsString(student);
-    }
+
 }

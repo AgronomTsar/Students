@@ -1,10 +1,13 @@
 package com.students.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.j256.ormlite.dao.Dao;
 import com.students.serializers.GroupSerializer;
 import com.students.models.Student;
-import com.students.models.Student_group;
+import com.students.models.studentGroup;
+import com.students.serializers.StudentSerializer;
 import io.javalin.http.Context;
 
 import java.sql.SQLException;
@@ -12,36 +15,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupRequest {
-    private final Dao<Student_group,Integer> dao;
+    private final Dao<studentGroup,Integer> dao;
     private final Dao<Student,Integer> daoStudent;
-    public GroupRequest(Dao<Student_group, Integer> dao,Dao<Student,Integer> daoStudent) {
+    public GroupRequest(Dao<studentGroup, Integer> dao, Dao<Student,Integer> daoStudent) {
         this.dao = dao;
         this.daoStudent=daoStudent;
     }
-    public Student_group findGroupById(int id) throws SQLException, JsonProcessingException {
+    public studentGroup findGroupById(int id) throws SQLException, JsonProcessingException {
         return dao.queryForId(id);
     }
-    public List<String> findAllGroup(Context ctx) throws SQLException, JsonProcessingException {
-        ArrayList<Student_group> groups= (ArrayList<Student_group>) dao.queryForAll();
-        ArrayList<String> s= (ArrayList<String>) GroupSerializer.listSerializer(groups,dao,daoStudent);
+    public String findAllGroup(Context ctx) throws SQLException, JsonProcessingException {
+        ArrayList<studentGroup> groups= (ArrayList<studentGroup>) dao.queryForAll();
+//        ArrayList<String> groupJson=new ArrayList<String>();
+        ObjectMapper om=new ObjectMapper();
+        SimpleModule m=new SimpleModule();
+        m.addSerializer(studentGroup.class,new GroupSerializer(dao,daoStudent));
+        m.addSerializer(Student.class, new StudentSerializer());
+        om.registerModule(m);
+//        int count=0;
+//        while(count<groups.size()){
+//            groupJson.add(om.writeValueAsString(groups.get(count)));
+//            count++;
+//        }
         ctx.status(200);
-        return s;
+        return om.writeValueAsString(groups);
     }
     public String groupId(int id) throws SQLException, JsonProcessingException {
-        Student_group student_group=dao.queryForId(id);
-        return GroupSerializer.groupStringConverter(student_group,dao,daoStudent);
+        studentGroup studentGroup =dao.queryForId(id);
+        ObjectMapper om=new ObjectMapper();
+        SimpleModule m=new SimpleModule();
+        m.addSerializer(studentGroup.class,new GroupSerializer(dao,daoStudent));
+        m.addSerializer(Student.class, new StudentSerializer());
+        om.registerModule(m);
+        return om.writeValueAsString(studentGroup);
     }
     public String updateGroupById(Context ctx,int id_group,String name,String specialty_name) throws SQLException, JsonProcessingException {
-        Student_group student_group=dao.queryForId(id_group);
-        student_group.setName(name);
-        student_group.setSpecially_name(specialty_name);
-        dao.update(student_group);
+        studentGroup studentGroup =dao.queryForId(id_group);
+        studentGroup.setName(name);
+        studentGroup.setSpecially_name(specialty_name);
+        dao.update(studentGroup);
         ctx.status(200);
         return groupId(id_group);
     }
     public String saveGroup(Context ctx,int id_group,String name,String specialty_name) throws SQLException, JsonProcessingException {
-        Student_group student_group=new Student_group(id_group,name,specialty_name);
-        dao.create(student_group);
+        studentGroup studentGroup =new studentGroup(id_group,name,specialty_name);
+        dao.create(studentGroup);
         ctx.status(201);
         return groupId(id_group);
     }
