@@ -19,9 +19,9 @@ public class GroupDeserializer extends StdDeserializer<studentGroup> {
     @Override
     public studentGroup deserialize(JsonParser parser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode root=parser.getCodec().readTree(parser);
-        int id=root.get("Id").asInt();
+        int id=root.get("id").asInt();
         String name=root.get("name").asText();
-        String specialtyName=root.get("specialtyName").asText();
+        String specialtyName=root.get("specialty_name").asText();
         return new studentGroup(id,name,specialtyName);
     }
     public static studentGroup groupObjectConverter(String json) throws JsonProcessingException {

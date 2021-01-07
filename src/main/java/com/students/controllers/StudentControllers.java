@@ -18,6 +18,7 @@ public class StudentControllers {
     String studentId="/student/:id";
     String studentPatch="/studentPatch";
     String studentSave="/studentSave";
+    String studentDelete="/studentDelete";
 
     public StudentControllers(Dao<Student, Integer> studentDao, Dao<studentGroup, Integer> groupDao, StudentRequest st, GroupRequest g, Javalin app) {
         StudentDao = studentDao;
@@ -51,7 +52,7 @@ public class StudentControllers {
         });
     }
     public void deleteStudent(){
-        app.delete("/student/:id",ctx->{
+        app.delete(studentDelete,ctx->{
             st.deleteStudent(ctx,Integer.parseInt(ctx.pathParam("id")));
             ctx.status(204).result("204");
         });

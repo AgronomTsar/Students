@@ -23,12 +23,12 @@ public class StudentDeserializer extends StdDeserializer<Student> {
     @Override
     public Student deserialize(JsonParser parser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode root=parser.getCodec().readTree(parser);
-        int id=root.get("Id").asInt();
-        String firstName=root.get("firstName").asText();
-        String lastName=root.get("lastName").asText();
+        int id=root.get("id").asInt();
+        String firstName=root.get("first_name").asText();
+        String lastName=root.get("last_name").asText();
         String phone=root.get("phone").asText();
         String email=root.get("email").asText();
-        int id_group=root.get("id_group").asInt();
+        int id_group=root.get("group").asInt();
         try {
             return new Student(id,firstName,lastName,phone,email,daoGroup.queryForId(id_group));
         } catch (SQLException throwables) {
