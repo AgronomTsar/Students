@@ -7,29 +7,29 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.students.models.studentGroup;
+import com.students.models.StudentGroup;
 
 import java.io.IOException;
 
-public class GroupDeserializer extends StdDeserializer<studentGroup> {
+public class GroupDeserializer extends StdDeserializer<StudentGroup> {
     protected GroupDeserializer() {
-        super(studentGroup.class);
+        super(StudentGroup.class);
     }
 
     @Override
-    public studentGroup deserialize(JsonParser parser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public StudentGroup deserialize(JsonParser parser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode root=parser.getCodec().readTree(parser);
         int id=root.get("id").asInt();
         String name=root.get("name").asText();
         String specialtyName=root.get("specialty_name").asText();
-        return new studentGroup(id,name,specialtyName);
+        return new StudentGroup(id,name,specialtyName);
     }
-    public static studentGroup groupObjectConverter(String json) throws JsonProcessingException {
+    public static StudentGroup groupObjectConverter(String json) throws JsonProcessingException {
         ObjectMapper om=new ObjectMapper();
         SimpleModule m=new SimpleModule();
-        m.addDeserializer(studentGroup.class,new GroupDeserializer());
+        m.addDeserializer(StudentGroup.class,new GroupDeserializer());
         om.registerModule(m);
-        return om.readValue(json, studentGroup.class);
+        return om.readValue(json, StudentGroup.class);
     }
 
 }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.j256.ormlite.dao.Dao;
 import com.students.serializers.StudentSerializer;
 import com.students.models.Student;
-import com.students.models.studentGroup;
+import com.students.models.StudentGroup;
 import io.javalin.http.Context;
 
 import java.sql.SQLException;
@@ -42,7 +42,7 @@ public class StudentRequest {
         om.registerModule(m);
         return om.writeValueAsString(student);
     }
-    public String updateStudentById(Context ctx,int id, String first_name, String last_name, String phone, String email, studentGroup id_group) throws SQLException, JsonProcessingException {
+    public String updateStudentById(Context ctx,int id, String first_name, String last_name, String phone, String email, StudentGroup id_group) throws SQLException, JsonProcessingException {
         Student student=dao.queryForId(id);
         student.setFirst_name(first_name);
         student.setLast_name(last_name);
@@ -53,7 +53,7 @@ public class StudentRequest {
         ctx.status(200);
         return findStudentById(id) ;
     }
-    public String saveStudent(Context ctx, int id, String firstName, String lastName, String phone, String email, studentGroup id_group) throws SQLException, JsonProcessingException {
+    public String saveStudent(Context ctx, int id, String firstName, String lastName, String phone, String email, StudentGroup id_group) throws SQLException, JsonProcessingException {
         Student student=new Student(id,firstName,lastName,phone,email,id_group);
         dao.create(student);
         ctx.status(201);

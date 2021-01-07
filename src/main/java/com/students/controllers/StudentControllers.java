@@ -3,14 +3,14 @@ package com.students.controllers;
 import com.j256.ormlite.dao.Dao;
 import com.students.deserializer.StudentDeserializer;
 import com.students.models.Student;
-import com.students.models.studentGroup;
+import com.students.models.StudentGroup;
 import com.students.service.GroupRequest;
 import com.students.service.StudentRequest;
 import io.javalin.Javalin;
 
 public class StudentControllers {
     Dao<Student,Integer> StudentDao;
-    Dao<studentGroup,Integer> GroupDao;
+    Dao<StudentGroup,Integer> GroupDao;
     StudentRequest st;
     GroupRequest g;
     Javalin app;
@@ -20,7 +20,7 @@ public class StudentControllers {
     String studentSave="/studentSave";
     String studentDelete="/studentDelete";
 
-    public StudentControllers(Dao<Student, Integer> studentDao, Dao<studentGroup, Integer> groupDao, StudentRequest st, GroupRequest g, Javalin app) {
+    public StudentControllers(Dao<Student, Integer> studentDao, Dao<StudentGroup, Integer> groupDao, StudentRequest st, GroupRequest g, Javalin app) {
         StudentDao = studentDao;
         GroupDao = groupDao;
         this.st = st;
